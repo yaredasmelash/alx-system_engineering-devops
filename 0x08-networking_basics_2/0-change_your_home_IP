@@ -1,24 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Configures an Ubuntu server as follows:
+#   - localhost resolves to 127.0.0.2
+#   - facebook.com resolves to 8.8.8.8
 
-# Check if the script is run with sudo privileges
-if [ "$(id -u)" -ne 0 ]; then
-   # If the script is not run with sudo privileges, print an error message and exit with a status code of 1
-   echo "This script must be run with sudo privileges."
-   exit 1
-fi
-
-# Save the current /etc/hosts file as a backup with the name /etc/hosts.backup
-sudo cp /etc/hosts /etc/hosts.backup
-
-# Modify the /etc/hosts file to contain the following entries:
-# 127.0.0.1       localhost
-# 127.0.0.2       localhost
-# 8.8.8.8         facebook.com
-cat <<EOT | sudo tee /etc/hosts
-127.0.0.1       localhost
-127.0.0.2       localhost
-8.8.8.8         facebook.com
-EOT
-
-# Print a message to inform the user that the hosts file has been modified
-echo "The hosts file has been modified."
+cp /etc/hosts ~/hosts.new
+echo "127.0.0.2		localhost" > ~/hosts.new
+echo "8.8.8.8		facebook.com" >> ~/hosts.new
+cp -f ~/hosts.new /etc/hosts
